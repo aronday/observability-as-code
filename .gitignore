@@ -1,6 +1,11 @@
 # Local .terraform directories
 **/.terraform/*
-**/.credentials/*
+
+#Credentials files
+*credentials/*
+
+#.lock files
+*.terraform.lock.*
 
 # .tfstate files
 *.tfstate
