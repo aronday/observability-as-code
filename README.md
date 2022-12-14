@@ -16,8 +16,6 @@ This example demonstrates how to use terraform with the following providers:
 We use Datadog's eCommerce example to demostrate applying observability principals to an eCommerce app.
 More information can be found [here](https://github.com/datadog/ecommerce-workshop)
 
-for configuring dashboards, monitors, and tracing.
-
 ## Prerequisites
 
 * [AWS Account](https://aws.amazon.com/free/)
@@ -43,7 +41,7 @@ for configuring dashboards, monitors, and tracing.
 ### Datadog
 
 1. Create [API](https://app.datadoghq.com/organization-settings/api-keys) & [Application](https://app.datadoghq.com/organization-settings/application-keys) Keys for terraform to use.
-2. Create Enviorement varaibles for both API & Application Keys
+2. Create environment varaibles for both API & Application Keys
     ```shell
     export TF_VAR_dd_api="<INSERT_KEY>"
     export TF_VAR_dd_app="<INSERT_KEY>"
@@ -133,6 +131,7 @@ terraform destroy
 
 ## Datadog UI
 TODO
+Datadog provider will be used for configuring dashboards, monitors, and tracing.
 
 ## Cloudcraft
 TODO
