@@ -1,0 +1,23 @@
+datadog:
+  site: datadoghq.com
+  apiKey: ${DD_API_KEY}
+  clusterChecks:
+    enabled: true
+  logs:
+    enabled: true
+    containerCollectAll: true
+  processAgent:
+    enabled: true
+  apm:
+    enabled: true
+    portEnabled: true
+  admissionController:
+    enabled: true
+    mutateUnlabelled: true
+  securityAgent:
+    compliance:
+      enabled: true
+  tags: 
+    - "team:sales-engineering"
+clusterAgent:
+  enabled: true
