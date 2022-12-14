@@ -1,6 +1,10 @@
+##-----------------------------------------##
+##           Create AWS IAM Role for DD          ##
+## ----------------------------------------##
+
+#Call the AWS Caller Identity Service to get AWS Account ID
 data "aws_caller_identity" "current" {}
-#Create IAM Role for Datadog
-#Link  - 
+
 data "aws_iam_policy_document" "datadog_aws_integration_assume_role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -117,7 +121,10 @@ resource "aws_iam_role_policy_attachment" "datadog_aws_integration" {
   policy_arn = "${aws_iam_policy.datadog_aws_integration.arn}"
 }
 
-#Enable the AWS integration Tile! 
+##-----------------------------------------##
+##            Enable the AWS integration           ##
+## ----------------------------------------##
+
 resource "datadog_integration_aws" "sandbox" {
   depends_on = [
     aws_secretsmanager_secret.datadog
@@ -125,6 +132,7 @@ resource "datadog_integration_aws" "sandbox" {
   account_id  = "${data.aws_caller_identity.current.account_id}"
   role_name   = "DatadogAWSIntegrationRole"
   filter_tags = ["Owner:Aron.Day"]
+  cspm_resource_collection_enabled = true
 }
 
 resource "datadog_integration_aws_tag_filter" "rds" {
@@ -143,4 +151,68 @@ depends_on = [
   account_id     = "${data.aws_caller_identity.current.account_id}"
   namespace      = "lambda"
   tag_filter_str = "Owner:Aron.Day"
+}
+
+##-----------------------------------------##
+##   Create Datadog Synthetics HTTP test   ##
+## ----------------------------------------##
+
+# Create a new Datadog Synthetics API/HTTP test on storedog!
+resource "datadog_synthetics_test" "storedog_api" {
+  type    = "api"
+  subtype = "http"
+  request_definition {
+    method = "GET"
+    url    = "http://${aws_instance.app_server.public_ip}:3000"
+  }
+  assertion {
+    type     = "statusCode"
+    operator = "is"
+    target   = "200"
+  }
+  locations = ["aws:eu-west-1"]
+  options_list {
+    tick_every = 900
+
+    retry {
+      count    = 2
+      interval = 300
+    }
+
+    monitor_options {
+      renotify_interval = 120
+    }
+  }
+  name    = "An API test on Storedog"
+  message = "Notify @aronday"
+  tags    = ["owner:Aron.Day", "env:development"]
+
+  status = "live"
+}
+
+##-----------------------------------------##
+##      Create Datadog SLO for Storedog      ##
+## ----------------------------------------##
+resource "datadog_service_level_objective" "bar" {
+  depends_on = [
+    datadog_synthetics_test.storedog_api
+  ]
+  name        = "Storedog Uptime SLO"
+  type        = "monitor"
+  description = "Storedog Index Uptime SLO"
+  monitor_ids = ["${datadog_synthetics_test.storedog_api.monitor_id}"]
+
+  thresholds {
+    timeframe = "7d"
+    target    = 99.9
+    warning   = 99.99
+  }
+
+  thresholds {
+    timeframe = "30d"
+    target    = 99.9
+    warning   = 99.99
+  }
+
+  tags = ["owner:Aron.Day", "env:development"]
 }
