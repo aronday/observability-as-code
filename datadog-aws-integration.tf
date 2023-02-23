@@ -5,6 +5,7 @@
 #Call the AWS Caller Identity Service to get AWS Account ID
 data "aws_caller_identity" "current" {}
 
+#This is public data - AWS ARN #
 data "aws_iam_policy_document" "datadog_aws_integration_assume_role" {
   statement {
     actions = ["sts:AssumeRole"]
