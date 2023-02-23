@@ -8,6 +8,9 @@ resource "aws_secretsmanager_secret" "datadog" {
 # Creating a AWS secret versions for Datadog
 #Note this is using an environment variable TF_VAR_dd_api & TF_VAR_dd_app
 resource "aws_secretsmanager_secret_version" "datadog" {
+   depends_on = [
+     aws_secretsmanager_secret.datadog
+   ]
   secret_id = aws_secretsmanager_secret.datadog.id
   secret_string = <<EOF
    {
@@ -26,6 +29,9 @@ resource "aws_secretsmanager_secret" "cloudcraft" {
 # Creating a AWS secret versions for Cloudcraft
 #Note this is using an environment variable TF_VAR_cc_api
 resource "aws_secretsmanager_secret_version" "cloudcraft" {
+   depends_on = [
+     aws_secretsmanager_secret.cloudcraft
+   ]
   secret_id = aws_secretsmanager_secret.cloudcraft.id
   secret_string = <<EOF
    {
