@@ -41,19 +41,6 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-# read service user secret
-# data "aws_secretsmanager_secret" "dd_api" {
-#   name = "cloudcraft"
-# }
-
-# data "aws_secretsmanager_secret_version" "dd_api" {
-#   secret_id = data.aws_secretsmanager_secret.dd_api.id
-# }
-
-# locals {
-#   dd_api = jsondecode(data.aws_secretsmanager_secret_version.dd_api.secret_string)
-# }
-
 resource "aws_instance" "app_server" {
   ami                         = data.aws_ami.amazon_linux.id
   availability_zone           = "${var.region}a"

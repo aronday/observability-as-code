@@ -57,3 +57,11 @@ variable "dd_app" {
 variable "cc_api" {
   description = "CloudCraft API"
 }
+
+variable "datadog_tags" {
+  description = "Default Tags to use on datadog resources"
+}
+
+variable "s3_bucket_name" {
+  description = "S3 Bucket Name to be setup for Logs Archives"
+}

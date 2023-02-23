@@ -1,0 +1,15 @@
+resource "datadog_logs_index" "storedog_index" {
+  name           = "storedog-index" #Note this has to be lowercase & no whitespace
+  filter {
+    query = "name:storedog"
+  }
+  
+  exclusion_filter {
+    name       = "Test Exclusion"
+    is_enabled = true
+    filter {
+      query       = "service:kube_apiserver"
+      sample_rate = 1.0 # 1.0 = 100%
+    }
+  }
+}
