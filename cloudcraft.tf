@@ -25,6 +25,7 @@ data "http" "cloudcraft_externalId" {
 locals {
     # get json 
     externalId = jsondecode(data.http.cloudcraft_externalId.response_body)
+    # run_once = true
 }
 
 # output "CloudCraftexternalId" {
@@ -69,7 +70,17 @@ resource "aws_iam_role_policy_attachment" "cloudcraft_aws_integration" {
 #Note this will add an account every time terraform plan/apply runs
 #Need to find a work around to make this permanent 
 
+# resource "null_resource" "run_once" {
+#   count = local.run_once ? 1 : 0
+
+#   provisioner "local-exec" {
+#     command = "echo 'This resource only runs once'"
+#   }
+# }
+
 # data "http" "cloudcraft_aws_post" {
+#   depends_on = [null_resource.run_once]
+
 #   url    = "https://api.cloudcraft.co/aws/account"
 #   method = "POST"
 #   request_headers = {
