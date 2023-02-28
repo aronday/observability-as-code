@@ -59,7 +59,7 @@ resource "aws_instance" "app_server" {
     volume_type           = var.ec2.volume_type
   }
   #user_data = file("templates/${var.ec2.os_type}.sh")
-  user_data = templatefile("templates/${var.ec2.os_type}.sh.tftpl", { DD_API_KEY = "${local.dd_api.apiKey}", DD_CLIENT_TOKEN = "${datadog_rum_application.storedog.client_token}", DD_APPLICATION_ID ="${datadog_rum_application.storedog.id}"})
+  user_data = templatefile("templates/${var.ec2.os_type}-datadog.sh.tftpl", { DD_API_KEY = "${local.dd_api.apiKey}", DD_CLIENT_TOKEN = "${datadog_rum_application.storedog.client_token}", DD_APPLICATION_ID ="${datadog_rum_application.storedog.id}"})
   tags = {
     Name = "StoreDog"
     Owner = "Aron.Day"
