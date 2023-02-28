@@ -33,6 +33,7 @@ ec2 = {
 }
 
 #Datadog
+enable_datadog = false
 datadog_tags =["owner:aron.day", "env:development"]
 
 #Logs Archive - S3

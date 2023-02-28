@@ -65,3 +65,9 @@ variable "datadog_tags" {
 variable "s3_bucket_name" {
   description = "S3 Bucket Name to be setup for Logs Archives"
 }
+
+variable "enable_datadog" {
+  description = "Boolean Logic to enable Datadog"
+  type    = bool
+  default = false
+}

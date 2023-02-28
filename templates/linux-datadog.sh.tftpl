@@ -1,0 +1,14 @@
+#! /bin/bash
+sudo yum update -y
+sudo yum install -y git
+git clone https://github.com/DataDog/ecommerce-workshop.git /tmp/ecommerce-workshop
+sudo yum install -y docker
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+#sudo docker pull nginx:latest
+#sudo docker run --name mynginx1 -p 80:80 -d nginx
+#sudo POSTGRES_USER=postgres POSTGRES_PASSWORD=postgres DD_API_KEY=${DD_API_KEY} /usr/local/bin/docker-compose -f /tmp/ecommerce-workshop/deploy/docker-compose/docker-compose-fixed-instrumented.yml up -d
+sudo POSTGRES_USER=postgres POSTGRES_PASSWORD=postgres DD_API_KEY=${DD_API_KEY} DD_CLIENT_TOKEN=${DD_CLIENT_TOKEN} DD_APPLICATION_ID=${DD_APPLICATION_ID} /usr/local/bin/docker-compose -f /tmp/ecommerce-workshop/deploy/docker-compose/docker-compose-fixed-instrumented.yml up -d
+#DD_API_KEY=${DD_API_KEY} DD_SITE="datadoghq.com" bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script_agent7.sh)"
